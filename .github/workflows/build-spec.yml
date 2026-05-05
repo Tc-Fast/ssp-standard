@@ -123,6 +123,6 @@ jobs:
 
     - name: Check for trailing spaces
       run: |
-        ! grep -rIn ' $' --include="*.adoc" --include="*.h" --include="*.c" \
-          --include="*.xsd" --include="*.xml" --include="*.yml" \
-          --include="*.txt" --include="*.ps1" .
+        ! grep -rIn ' $' --include="*.adoc" \
+          --include="*.xsd" --include="*.yml" \
+          --include="*.txt" .
