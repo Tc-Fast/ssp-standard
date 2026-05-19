@@ -59,7 +59,7 @@
                 <xs:element name="System" type="ssd:TSystem"/>
                 <xs:element name="Enumerations" minOccurs="0" type="ssc:TEnumerations"/>
                 <xs:element name="Units" minOccurs="0" type="ssc:TUnits"/>
-                <xs:element name="Terminals" minOccurs="0" type="ssd:TTerminals"/>
+                <xs:element name="Terminals" minOccurs="0" type="ssc:TTerminalTypes"/>
                 <xs:element name="DefaultExperiment" minOccurs="0" type="ssd:TDefaultExperiment"/>
                 <xs:group ref="ssc:GMetaData"/>
                 <xs:group ref="ssc:GSignature"/>
@@ -106,7 +106,7 @@
                         The set of connectors of this element, which represent
                         the interface of the element to the outside world.
 
-                        For components the set of connectors must match variable/ports
+                        For components the set of connectors must match variables
                         of the underlying component implementation, e.g. the referenced
                         FMU, by name.
 
@@ -712,7 +712,7 @@
                                 This attribute gives the connector a name, which
                                 shall be unique within the component or system and,
                                 for components, must match the name of a relevant
-                                variable/port in the underlying component implementation,
+                                variable in the underlying component implementation,
                                 e.g. the referenced FMU.
 
                                 Note that there is no requirement that connectors must
@@ -1001,82 +1001,6 @@
                 </xs:complexType>
             </xs:element>
         </xs:sequence>
-    </xs:complexType>
-
-    <xs:complexType name="TTerminals">
-        <xs:annotation>
-            <xs:documentation xml:lang="en">
-                A set of terminal type definitions, referenced by name from
-                connectors of kind "terminal".
-            </xs:documentation>
-        </xs:annotation>
-        <xs:sequence>
-            <xs:element name="Terminal" minOccurs="1" maxOccurs="unbounded" type="ssd:TTerminal"/>
-        </xs:sequence>
-    </xs:complexType>
-
-    <xs:complexType name="TTerminal">
-        <xs:annotation>
-            <xs:documentation xml:lang="en">
-                Defines a terminal type with member connectors (kind="local"),
-                optional nested sub-terminals, and a matching rule.
-                Compatible with FMI 3.0 terminals.
-            </xs:documentation>
-        </xs:annotation>
-        <xs:sequence>
-            <xs:element name="Connectors" minOccurs="0" type="ssd:TConnectors">
-                <xs:annotation>
-                    <xs:documentation xml:lang="en">
-                        The member connectors of this terminal, using kind="local".
-                    </xs:documentation>
-                </xs:annotation>
-            </xs:element>
-            <xs:element name="Terminals" minOccurs="0" type="ssd:TTerminals">
-                <xs:annotation>
-                    <xs:documentation xml:lang="en">
-                        Nested sub-terminals.
-                    </xs:documentation>
-                </xs:annotation>
-            </xs:element>
-            <xs:element name="Annotations" minOccurs="0" type="ssc:TAnnotations"/>
-        </xs:sequence>
-        <xs:attributeGroup ref="ssc:ABaseElement"/>
-        <xs:attribute name="name" type="xs:string" use="required">
-            <xs:annotation>
-                <xs:documentation xml:lang="en">
-                    Unique name of the terminal type. Qualified names
-                    (e.g. reverse domain name notation) are recommended.
-                </xs:documentation>
-            </xs:annotation>
-        </xs:attribute>
-        <xs:attribute name="matchingRule" use="required">
-            <xs:annotation>
-                <xs:documentation xml:lang="en">
-                    Matching rule for connecting terminals (FMI 3.0 semantics):
-                    - plug: All members must match by memberName.
-                    - bus: Partial matching by memberName allowed.
-                    - sequence: Matching by member order; count must match.
-                    - none: No automatic matching.
-                    Each terminal's matchingRule is evaluated independently.
-                </xs:documentation>
-            </xs:annotation>
-            <xs:simpleType>
-                <xs:restriction base="xs:normalizedString">
-                    <xs:enumeration value="plug"/>
-                    <xs:enumeration value="bus"/>
-                    <xs:enumeration value="sequence"/>
-                    <xs:enumeration value="none"/>
-                </xs:restriction>
-            </xs:simpleType>
-        </xs:attribute>
-        <xs:attribute name="terminalKind" type="xs:normalizedString" use="optional">
-            <xs:annotation>
-                <xs:documentation xml:lang="en">
-                    Optional terminal kind (FMI 3.0 semantics). Use reverse domain
-                    name notation (e.g. "com.example.MyTerminalType").
-                </xs:documentation>
-            </xs:annotation>
-        </xs:attribute>
     </xs:complexType>
 
     <xs:complexType name="TDefaultExperiment">

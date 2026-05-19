@@ -388,15 +388,36 @@ Lower values indicate higher priority.
 
 image:images/SystemStructureCommon_Terminal.svg[image]
 
-This type specifies that the connector in question represents a structured terminal, compatible with FMI 3.0 terminals.
-It *MUST* only be used for connectors of kind `terminal`. For detailed terminal semantics and behavior, refer to the FMI 3.0 specification.
+This type specifies that the connector in question represents a structured terminal.
+It *MUST* only be used for connectors of kind `terminal`.
+
+Two usage patterns are supported:
+
+1. *Global type reference*: provide only the `name` attribute, which references a `Terminal` definition in the `Terminals` section of the enclosing `SystemStructureDescription`.
+The connector names defined in the referenced `Terminal` definition are used directly as the variable names in the component; no separate variable name mapping is required.
+2. *Inline definition*: omit the `name` attribute and provide `matchingRule` together with a `Connectors` child element.
+Each `Connector` child defines a connector by `name` and optional `kind`; the connector name is used directly as the variable name in the component.
+`kind` may be omitted in inline definitions when direction is not relevant or not yet determined.
+Nested inline sub-terminals may be defined via a `Terminals` child element.
 
 [width="100%",cols="28%,72%",options="header",]
 |===
 |Attribute |Description
-|name |This required attribute references a terminal type definition by name.
-The name *MUST* match the name of a Terminal entry in the Terminals XML element of the top-level SystemStructureDescription element.
-The member-to-variable binding follows the naming convention `connectorName.memberName`.
+|name |This optional attribute references a global `Terminal` definition by name.
+The name *MUST* match the `name` attribute of a `Terminal` entry in the `Terminals` element of the top-level `SystemStructureDescription` element.
+This attribute *MUST NOT* be present when using an inline definition.
+|===
+
+The following XML child elements are specified for the Terminal element:
+
+[width="100%",cols="28%,72%",options="header",]
+|===
+|Element |Description
+|Connectors |This optional element defines the connector interface in inline terminal definitions.
+Each `Connector` child specifies a connector by `name`, optional `kind`, and optional type (see <<ssc_types>>).
+Must not be present when referencing a global `Terminal` by name.
+|Terminals |This optional element defines nested inline sub-terminal definitions.
+Each `Terminal` child has a `name` (for matching), `matchingRule`, and `Connectors`.
 |===
 
 [#ssc_transformations]
